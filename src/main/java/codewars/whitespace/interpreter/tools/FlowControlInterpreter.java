@@ -11,8 +11,37 @@ public class FlowControlInterpreter implements Interpreter {
     public void interpret(String code, InterpreterState state, InputStream input) {
         FlowControlOperation operation = parseOperation(code, state);
         switch (operation) {
+            case MARK:
+                Integer markLabel = ParameterReader.readLabel(code, state);
+                state.markLocation(markLabel);
+                break;
+            case CALL:
+                Integer callLabel = ParameterReader.readLabel(code, state);
+                state.callSubroutine(callLabel);
+                break;
+            case JUMP:
+                Integer jumpLabel = ParameterReader.readLabel(code, state);
+                state.jump(jumpLabel);
+                break;
+            case EQ_ZERO:
+                Integer n1 = state.stackPop();
+                if (n1.equals(0)) {
+                    Integer eqZeroLabel = ParameterReader.readLabel(code, state);
+                    state.jump(eqZeroLabel);
+                }
+                break;
+            case LT_ZERO:
+                Integer n2 = state.stackPop();
+                if (n2.compareTo(0) < 0) {
+                    Integer ltZeroLabel = ParameterReader.readLabel(code, state);
+                    state.jump(ltZeroLabel);
+                }
+                break;
+            case EXIT_SUBROUTINE:
+                state.exitSubroutine();
+                break;
             case EXIT:
-                return;
+                break;
             default:
                 throw new IllegalStateException(operation.toString());
         }

@@ -12,7 +12,7 @@ public class InterpreterState {
 
     private Stack<Integer> stack = new Stack<>();
     private Map<Integer, Integer> heap = new HashMap<>();
-    private Map<String, Integer> labels = new HashMap<>();
+    private Map<Integer, Integer> labels = new HashMap<>();
 
     public InterpreterState(int cursor) {
         this.cursor = cursor;
@@ -42,16 +42,20 @@ public class InterpreterState {
         return heap.put(address, value);
     }
 
-    public void jump(String label) {
-        subroutineStartedCursor = this.cursor;
+    public void jump(Integer label) {
         this.cursor = labels.get(label);
+    }
+
+    public void callSubroutine(Integer label) {
+        subroutineStartedCursor = this.cursor;
+        jump(label);
     }
 
     public void exitSubroutine() {
         this.cursor = subroutineStartedCursor;
     }
 
-    public Integer saveLabel(String label, Integer cursor) {
+    public Integer markLocation(Integer label) {
         checkLabelUnique(label);
         return labels.put(label, cursor);
     }
@@ -84,7 +88,7 @@ public class InterpreterState {
         return stack.size();
     }
 
-    private void checkLabelUnique(String label) {
+    private void checkLabelUnique(Integer label) {
         if (labels.containsKey(label)) {
             throw new IllegalStateException("Label " + label + " is not unique");
         }
