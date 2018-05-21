@@ -15,6 +15,8 @@ public class InterpreterFactory {
                 return new FlowControlInterpreter();
             case HEAP_ACCESS:
                 return new HeapAccessInterpreter();
+            case ARITHMETIC:
+                return new ArithmeticInterpreter();
             default:
                 throw new IllegalStateException("Interpreter for IMP: " + imp.name() + " was not found");
         }
