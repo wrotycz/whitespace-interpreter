@@ -5,7 +5,6 @@ import codewars.whitespace.interpreter.model.InterpreterState;
 import codewars.whitespace.interpreter.tools.InterpreterFactory;
 
 import java.io.InputStream;
-import java.util.Optional;
 
 public class WhitespaceInterpreter {
 
@@ -31,21 +30,21 @@ public class WhitespaceInterpreter {
 
     static IMP parseImpCommand(String code, InterpreterState state) {
         int cursor = state.getCursor();
-        Optional<IMP> impOptional = IMP.byCode(code.substring(cursor, cursor + 1));
-        if (impOptional.isPresent()) {
-            state.incrementCursor(1);
-            return impOptional.get();
-        }
-        state.incrementCursor(2);
-        return IMP.byCode(code.substring(cursor, cursor + 2))
-                .orElseThrow(() -> new IllegalStateException("Cannot parse expression"));
+        return IMP.byCode(code.substring(cursor, state.incrementCursor(1)))
+                .orElseGet(() -> IMP.byCode(code.substring(cursor, state.incrementCursor(1)))
+                        .orElseThrow(() -> new IllegalStateException("Cannot parse expression")));
     }
 
     static String prepareCode(String code) {
         return unbleach(removeComments(code));
     }
 
-    // transforms space characters to ['s','t','n'] chars;
+    /**
+     * Transforms space characters to ['s','t','n'] chars.
+     *
+     * @param code String input code
+     * @return unbleached code
+     */
     static String unbleach(String code) {
         return code != null ? code.replace(' ', 's').replace('\t', 't').replace('\n', 'n') : null;
     }

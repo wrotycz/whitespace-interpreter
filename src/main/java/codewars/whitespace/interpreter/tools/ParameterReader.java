@@ -31,9 +31,7 @@ public class ParameterReader {
     }
 
     private static String readBit(String code, InterpreterState state) {
-        int cursor = state.getCursor();
-        String codedBit = code.substring(cursor, cursor + 1);
-        state.incrementCursor(1);
+        String codedBit = code.substring(state.getCursor(), state.incrementCursor(1));
         switch (codedBit) {
             case "s":
                 return "0";
@@ -47,9 +45,7 @@ public class ParameterReader {
     }
 
     private static String parseNumberSign(String code, InterpreterState state) {
-        int cursor = state.getCursor();
-        String codedSign = code.substring(cursor, cursor + 1);
-        state.incrementCursor(1);
+        String codedSign = code.substring(state.getCursor(), state.incrementCursor(1));
         switch (codedSign) {
             case "t":
                 return "-";

@@ -46,9 +46,7 @@ public class InputOutputInterpreter implements Interpreter {
     }
 
     private InputOutputOperation parseOperation(String code, InterpreterState state) {
-        int cursor = state.getCursor();
-        state.incrementCursor(2);
-        return InputOutputOperation.byCode(code.substring(cursor, cursor + 2))
+        return InputOutputOperation.byCode(code.substring(state.getCursor(), state.incrementCursor(2)))
                 .orElseThrow(() -> new IllegalStateException("Cannot parse expression"));
     }
 

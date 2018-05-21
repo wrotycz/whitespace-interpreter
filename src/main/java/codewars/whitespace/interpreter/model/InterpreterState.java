@@ -60,12 +60,9 @@ public class InterpreterState {
         return labels.put(label, cursor);
     }
 
-    public void incrementCursor(int by) {
+    public int incrementCursor(int by) {
         cursor += by;
-    }
-
-    public void decrementCursor(int by) {
-        cursor -= by;
+        return cursor;
     }
 
     public int getCursor() {

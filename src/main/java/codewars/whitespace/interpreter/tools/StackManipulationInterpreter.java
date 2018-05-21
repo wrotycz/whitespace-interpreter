@@ -4,7 +4,6 @@ import codewars.whitespace.interpreter.model.InterpreterState;
 import codewars.whitespace.interpreter.model.StackManipulationOperation;
 
 import java.io.InputStream;
-import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.IntStream;
 
@@ -61,13 +60,8 @@ public class StackManipulationInterpreter implements Interpreter {
 
     private StackManipulationOperation parseOperation(String code, InterpreterState state) {
         int cursor = state.getCursor();
-        Optional<StackManipulationOperation> impOptional = StackManipulationOperation.byCode(code.substring(cursor, cursor + 1));
-        if (impOptional.isPresent()) {
-            state.incrementCursor(1);
-            return impOptional.get();
-        }
-        state.incrementCursor(2);
-        return StackManipulationOperation.byCode(code.substring(cursor, cursor + 2))
-                .orElseThrow(() -> new IllegalStateException("Cannot parse expression"));
+        return StackManipulationOperation.byCode(code.substring(cursor, state.incrementCursor(1)))
+                .orElseGet(() -> StackManipulationOperation.byCode(code.substring(cursor, state.incrementCursor(1)))
+                        .orElseThrow(() -> new IllegalStateException("Cannot parse expression")));
     }
 }

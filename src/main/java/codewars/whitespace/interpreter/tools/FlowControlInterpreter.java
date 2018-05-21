@@ -48,9 +48,7 @@ public class FlowControlInterpreter implements Interpreter {
     }
 
     private FlowControlOperation parseOperation(String code, InterpreterState state) {
-        int cursor = state.getCursor();
-        state.incrementCursor(2);
-        return FlowControlOperation.byCode(code.substring(cursor, cursor + 2))
+        return FlowControlOperation.byCode(code.substring(state.getCursor(), state.incrementCursor(2)))
                 .orElseThrow(() -> new IllegalStateException("Cannot parse expression"));
     }
 }
