@@ -13,6 +13,8 @@ public class InterpreterFactory {
                 return new InputOutputInterpreter();
             case FLOW_CONTROL:
                 return new FlowControlInterpreter();
+            case HEAP_ACCESS:
+                return new HeapAccessInterpreter();
             default:
                 throw new IllegalStateException("Interpreter for IMP: " + imp.name() + " was not found");
         }

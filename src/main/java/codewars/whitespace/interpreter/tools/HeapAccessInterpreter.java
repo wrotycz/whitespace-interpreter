@@ -11,7 +11,16 @@ public class HeapAccessInterpreter implements Interpreter {
     public void interpret(String code, InterpreterState state, InputStream input) {
         HeapAccessOperation operation = parseOperation(code, state);
         switch (operation) {
-
+            case STORE:
+                Integer toStore = state.stackPop();
+                Integer storeAddress = state.stackPop();
+                state.heapPut(storeAddress, toStore);
+                break;
+            case GET:
+                Integer address = state.stackPop();
+                Integer value = state.heapGet(address);
+                state.stackPush(value);
+                break;
             default:
                 throw new IllegalStateException(operation.toString());
         }
